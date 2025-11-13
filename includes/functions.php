@@ -2,6 +2,12 @@
     // This file will be used for all code that interacts with the database
 
     function getUsers($conn){
+        /* 
+            This function sets up an SQL statement, and tests if it will work.
+            If there's a problem with the SQL statement, it will show an error.
+            Otherwise, it executes the SQL statment, and returns the result to wherever it is called from.
+            IMPORTANT: the database connection must always be closed.
+        */
         $sql = "SELECT * FROM users";
         $stmt = mysqli_stmt_init($conn);
 
