@@ -15,7 +15,7 @@
         // print_r($row);
         // echo "<br/>";
 
-        // Once formated, we can now access each field of the database table we are reading from
+        // Once formated, we can now access each field of the database table we are reading fromx
         $id = $row['id'];
         $username = $row['username'];
         $password = $row['password'];
