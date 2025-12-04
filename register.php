@@ -11,7 +11,13 @@
     </div>
     <div class="row">
         <div class="col">
-            <form action="" method="post">
+            <!-- 
+                The way to submit data to a PHP file from a file is through the form's action.
+                The action will be the file's path. The code in that file will be executed immediately upon form submission.
+                If we want to include JavaScript validation, we can. That will be executed before the action is triggered.
+                You can see last year's example for that implementation.  
+            --> 
+            <form action="includes/register-inc.php" method="post">
                 <div class="row">
                     <div class="col">
                         <input type="text" name="username" id="username" placeholder="Username" class="w-100 m-2">
@@ -51,15 +57,55 @@
                 </div>
                 <div class="row my-3">
                     <div class="col">
-                        <button class="btn btn-success w-100 m-2" type="submit">Submit</button>
+                        <button class="btn btn-success w-100 m-2" type="submit" name="submit" id="submit">Submit</button>
                     </div>
                     <div class="col">
-                        <button class="btn btn-danger w-100 m-2" type="reset">Cancel</button>
+                        <button class="btn btn-danger w-100 m-2" type="reset" name="reset" id="reset">Cancel</button>
                     </div>
                 </div>
             </form>
         </div>
     </div>
+
+
+
+    <!-- 
+        Here, we can use the $_GET superglobal variable to get QueryString values from the URL.
+        QueryString values are key value pairs after the & symbol at the end of the URL. 
+        We can then take different actions based on the values we get. 
+    -->
+    <?php 
+        if(isset($_GET["error"])) { 
+            $error = "";
+            if ($_GET["error"] == "emptyinput"){
+                $error = "You have some empty fields.";
+            }
+            ?>
+            <div class="row">
+                <div class="col"></div>
+                <div class="col border border-danger text-danger">
+                    <p><?php echo $error; ?></p>
+                </div>
+                <div class="col"></div>
+            </div>
+    <?php } ?>
+
+
+    <?php 
+        if(isset($_GET["success"])) { 
+            $message = "";
+            if ($_GET["success"] == "true"){
+                $message = "You have successfully registered a new account.";
+            }
+            ?>
+            <div class="row">
+                <div class="col"></div>
+                <div class="col border border-success text-success">
+                    <p><?php echo $message; ?></p>
+                </div>
+                <div class="col"></div>
+            </div>
+    <?php } ?>
 </div>
 
 

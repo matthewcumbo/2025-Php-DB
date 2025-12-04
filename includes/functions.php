@@ -24,7 +24,6 @@
         return $result;
     }
 
-
     function getUser($conn, $userId){
         /*
             This function is very similar to the one above. It gets all details from the users table, but only for one user.
@@ -54,4 +53,45 @@
             return false;
         }
     }
+
+    function registerUser($conn, $username, $password, $firstName, $lastName, $age){
+        /*
+            This function will insert new data into the database. 
+            In our SQL, we need multiple wildcards, since we need to supply multiple pieces of information to be stored in the database.
+        */
+        $sql = "INSERT INTO users (username,password,name,surname,age) VALUES (?,?,?,?,?);";
+
+        $stmt = mysqli_stmt_init($conn);
+
+        if(!mysqli_stmt_prepare($stmt,$sql)){
+            // Here we are upgrading our error handling, using QueryStrings instead of a simple echo
+            header("location: ../register.php?error=stmtfailed");
+            exit();
+        }
+
+        // Password hashing is an essential process, which will modify how the password is structured and can never be decrypted, making our users' passwords secure
+        $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
+
+        mysqli_stmt_bind_param($stmt, "ssssi", $username, $hashedPassword, $firstName, $lastName, $age);
+
+        mysqli_stmt_execute($stmt);
+        mysqli_stmt_close($stmt);
+    }
+
+
+
+
+    // Validation functions
+    function emptyRegistrationInput($username, $password, $firstName, $lastName, $age){
+        if(empty($username) || empty($password) || empty($firstName) || empty($lastName) || empty($age)){
+            return true;
+        }
+    }
+    // We should have a bunch of other functions that check different things
+    // Examples: 
+    // - invalid username  -> maybe we do not want symbols in usernames
+    // - invalid password  -> we can check if a password has letters, numbers, and symbols
+    // - invalid email     -> check email structure : something@something.something
+
+
 ?>
