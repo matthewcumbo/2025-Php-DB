@@ -54,12 +54,12 @@
         }
     }
 
-    function registerUser($conn, $username, $password, $firstName, $lastName, $age){
+    function registerUser($conn, $username, $password, $firstName, $lastName, $age, $nationality, $email){
         /*
             This function will insert new data into the database. 
             In our SQL, we need multiple wildcards, since we need to supply multiple pieces of information to be stored in the database.
         */
-        $sql = "INSERT INTO users (username,password,name,surname,age) VALUES (?,?,?,?,?);";
+        $sql = "INSERT INTO users (username,password,name,surname,age,nationality,email) VALUES (?,?,?,?,?,?,?);";
 
         $stmt = mysqli_stmt_init($conn);
 
@@ -72,7 +72,7 @@
         // Password hashing is an essential process, which will modify how the password is structured and can never be decrypted, making our users' passwords secure
         $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
 
-        mysqli_stmt_bind_param($stmt, "ssssi", $username, $hashedPassword, $firstName, $lastName, $age);
+        mysqli_stmt_bind_param($stmt, "ssssiss", $username, $hashedPassword, $firstName, $lastName, $age, $nationality, $email);
 
         mysqli_stmt_execute($stmt);
         mysqli_stmt_close($stmt);
@@ -82,11 +82,34 @@
 
 
     // Validation functions
-    function emptyRegistrationInput($username, $password, $firstName, $lastName, $age){
-        if(empty($username) || empty($password) || empty($firstName) || empty($lastName) || empty($age)){
+    function emptyRegistrationInput($username, $password, $firstName, $lastName, $age, $nationality, $email){
+        if(empty($username) || empty($password) || empty($firstName) || empty($lastName) || empty($age) || empty($nationality) || empty($email)){
             return true;
         }
     }
+
+    function invalidUsername($username){
+        // allow letters and numbers, but nothing else
+        if(!preg_match("/^[a-zA-Z0-9]*$/",$username)){
+            return true;
+        }
+    }
+
+    function passwordsDoNotMatch($password, $confpass){
+        // check if passwords have the same value
+        if($password != $confpass){
+            return true;
+        }
+    }
+
+    function invalidEmail($email){
+        if(!filter_var($email, FILTER_VALIDATE_EMAIL)){
+            return true;
+        }
+    }
+
+
+
     // We should have a bunch of other functions that check different things
     // Examples: 
     // - invalid username  -> maybe we do not want symbols in usernames

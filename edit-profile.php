@@ -60,6 +60,13 @@
             </form>
         </div>
     </div>
+    <div class="row">
+        <div class="col">
+            <form action="" method="post">
+                <button type="submit" id="deleteAccount" name="deleteAccount">Delete Account</button>
+            </form>
+        </div>
+    </div>
 </div>
 
 

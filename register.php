@@ -20,27 +20,36 @@
             <form action="includes/register-inc.php" method="post">
                 <div class="row">
                     <div class="col">
-                        <input type="text" name="username" id="username" placeholder="Username" class="w-100 m-2">
+                        <input type="text" name="username" id="username" placeholder="joeborg" class="w-100 m-2">
                     </div>
                     <div class="col">
-                        <input type="password" name="password" id="password" placeholder="Password" class="w-100 m-2">
+                        <input type="email" name="email" id="email" placeholder="joeborg@gmail.com" class="w-100 m-2">
                     </div>
                 </div>
                 <div class="row">
                     <div class="col">
-                        <input type="text" name="name" id="name" placeholder="First Name" class="w-100 m-2">
+                        <input type="password" name="password" id="password" placeholder="abc123!" class="w-100 m-2">
                     </div>
                     <div class="col">
-                        <input type="text" name="surname" id="surname" placeholder="Last Name" class="w-100 m-2">
+                        <input type="password" name="confpass" id="confpass" placeholder="abc123!" class="w-100 m-2">
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col">
+                        <input type="text" name="name" id="name" placeholder="Joe" class="w-100 m-2">
+                    </div>
+                    <div class="col">
+                        <input type="text" name="surname" id="surname" placeholder="Borg" class="w-100 m-2">
                     </div>
                 </div>
                 
                 <div class="row">
-                    <div class="col w-100 m-2">
-                        <label for="age" class="float-end">Age:</label>
+                    <div class="col">
+                        <input type="text" name="nationality" id="nationality" placeholder="Maltese" class="w-100 m-2">
                     </div>
-                    <div class="col w-100 m-2">
-                        <select name="age" id="age">
+                    <div class="col p-2">
+                        <label for="age" class="ms-2">Age:</label>
+                        <select name="age" id="age" class="h-100">
                             <option value="15">15</option>
                             <option value="16">16</option>
                             <option value="17">17</option>
@@ -76,14 +85,24 @@
     -->
     <?php 
         if(isset($_GET["error"])) { 
-            $error = "";
-            if ($_GET["error"] == "emptyinput"){
-                $error = "You have some empty fields.";
+            $error = "<h5>Could not register account:</h5><ul>";
+            if (isset($_GET["emptyinput"])){
+                $error = $error."<li>You have some empty fields.</li>";
             }
+            if (isset($_GET["invalidUsername"])){
+                $error = $error."<li>Username format invalid.</li>";
+            }
+            if (isset($_GET["invalidEmail"])){
+                $error = $error."<li>Email format invalid.</li>";
+            }
+            if (isset($_GET["passwordsDoNotMatch"])){
+                $error = $error."<li>Passwords do not match.</li>";
+            }
+            $error= $error."</ul>";
             ?>
             <div class="row">
                 <div class="col"></div>
-                <div class="col border border-danger text-danger">
+                <div class="col-6 border border-danger text-danger">
                     <p><?php echo $error; ?></p>
                 </div>
                 <div class="col"></div>
