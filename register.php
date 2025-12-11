@@ -102,7 +102,7 @@
             ?>
             <div class="row">
                 <div class="col"></div>
-                <div class="col-6 border border-danger text-danger">
+                <div class="col-6 border border-danger text-danger rounded">
                     <p><?php echo $error; ?></p>
                 </div>
                 <div class="col"></div>
