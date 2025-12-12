@@ -29,6 +29,8 @@
 </head>
 <body>
 
+<?php session_start(); ?>
+
 
 <nav class="navbar navbar-expand-lg bg-body-tertiary">
   <div class="container-fluid">
@@ -55,9 +57,18 @@
             <li><a class="dropdown-item" href="#">Something else here</a></li>
           </ul>
         </li>
-        <li class="nav-item">
-          <a class="nav-link disabled" aria-disabled="true">Disabled</a>
-        </li>
+        
+        <!-- If user is logged in -> show logout link -->
+        <?php if(isset($_SESSION["userId"])) { ?>
+          <li class="nav-item">
+            <a class="nav-link" href="includes/logout-inc.php">Logout</a>
+          </li>
+        <?php } else { ?>
+        <!-- If user is logged out -> show login link -->
+          <li class="nav-item">
+            <a class="nav-link" href="login.php">Login</a>
+          </li>
+        <?php } ?>
       </ul>
       <form class="d-flex" role="search">
         <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search"/>

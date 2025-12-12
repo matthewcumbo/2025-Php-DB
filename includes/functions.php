@@ -81,6 +81,64 @@
 
 
 
+
+    function login($conn, $username, $password){
+        $user = userExists($conn, $username);
+        
+        if(!$user){
+            header("location: ../login.php?error=incorrectlogin");
+            exit();
+        }
+
+        $userId = $user["id"];
+
+        $user = getUser($conn, $userId);
+        $dbPassword = $user["password"];
+        $checkedPassword = password_verify($password, $dbPassword);
+
+        if(!$checkedPassword){
+            header("location: ../login.php?error=incorrectlogin");
+            exit();
+        }
+
+        session_start();
+        $_SESSION["username"] = $username;
+        $_SESSION["userId"] = $userId;
+
+        header("location: ../profile.php");
+        exit();
+    }
+
+    function userExists($conn, $username){
+        $sql = "SELECT id FROM users WHERE username = ?;";
+
+        $stmt = mysqli_stmt_init($conn);
+
+        if(!mysqli_stmt_prepare($stmt,$sql)){
+            header("location: ../login.php?error=stmtfailed");
+            exit();
+        }
+
+        mysqli_stmt_bind_param($stmt, "s", $username);
+        
+        mysqli_stmt_execute($stmt);
+
+        $result = mysqli_stmt_get_result($stmt);
+        mysqli_stmt_close($stmt);
+
+        if($row = mysqli_fetch_assoc($result)){
+            return $row;
+        }
+        else{
+            return false;
+        }
+
+    }
+
+
+
+
+
     // Validation functions
     function emptyRegistrationInput($username, $password, $firstName, $lastName, $age, $nationality, $email){
         if(empty($username) || empty($password) || empty($firstName) || empty($lastName) || empty($age) || empty($nationality) || empty($email)){
