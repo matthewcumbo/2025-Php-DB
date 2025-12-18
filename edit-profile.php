@@ -66,7 +66,7 @@
     </div>
     <div class="row">
         <div class="col">
-            <form action="" method="post">
+            <form action="includes/delete-user-inc.php" method="post">
                 <button type="submit" id="deleteAccount" name="deleteAccount">Delete Account</button>
             </form>
         </div>
