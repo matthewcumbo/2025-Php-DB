@@ -135,6 +135,22 @@
 
     }
 
+    function deleteUser($conn, $userId){
+        $sql = "DELETE FROM users WHERE id = ?;";
+
+        $stmt = mysqli_stmt_init($conn);
+
+        if(!mysqli_stmt_prepare($stmt,$sql)){
+            header("location: ../edit-profile.php?error=stmtfailed");
+            exit();
+        }
+
+        mysqli_stmt_bind_param($stmt, "i", $userId);
+        
+        mysqli_stmt_execute($stmt);
+        mysqli_stmt_close();
+    }
+
 
 
 
