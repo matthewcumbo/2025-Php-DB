@@ -1,6 +1,10 @@
 <?php 
     include "includes/header.php";
 
+    if(!isset($_SESSION["username"])){
+        header("location: login.php");
+        exit();
+    }
 ?>
 
 <div class="container" style="width:800px;">
