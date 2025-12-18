@@ -71,6 +71,19 @@
             </form>
         </div>
     </div>
+    <div class="row mt-5">
+        <div class="col">
+            <form
+                enctype="multipart/form-data"
+                action="includes/upload-image-inc.php" 
+                method="POST">
+                
+                <label for="">Profile Picture: </label>
+                <input type="file" name="userFile" id="userFile">
+                <button type="submit" id="uploadFile" name="uploadFile" value="upload">Upload Profile Picture</button>
+            </form>
+        </div>
+    </div>
 </div>
 
 
