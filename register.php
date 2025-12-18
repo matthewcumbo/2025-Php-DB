@@ -17,7 +17,18 @@
                 If we want to include JavaScript validation, we can. That will be executed before the action is triggered.
                 You can see last year's example for that implementation.  
             --> 
-            <form action="includes/register-inc.php" method="post">
+                <?php 
+                    
+                    if(isset($_GET["userId"])){
+                        $selectedFormAction = "includes/edit-inc.php"; 
+                    }
+                    else{
+                        $selectedFormAction = "includes/register-inc.php"; 
+                    }
+                    
+                    ?>
+            <form action="<?php echo $selectedFormAction; ?>" method="post">
+            <!-- <form action="includes/register-inc.php" method="post"> -->
                 <div class="row">
                     <div class="col">
                         <input type="text" name="username" id="username" placeholder="joeborg" class="w-100 m-2">

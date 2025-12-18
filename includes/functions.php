@@ -135,6 +135,24 @@
 
     }
 
+    function editUser($conn, $userId, $username, $password, $firstName, $lastName, $age){
+        $sql = "UPDATE users SET username = ?, password = ?, name = ?,surname = ?, age = ? WHERE id = ?;";
+
+        $stmt = mysqli_stmt_init($conn);
+
+        if(!mysqli_stmt_prepare($stmt,$sql)){
+            header("location: ../edit-profile.php?error=stmtfailed");
+            exit();
+        }
+
+        $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
+
+        mysqli_stmt_bind_param($stmt, "ssssii", $username, $hashedPassword, $firstName, $lastName, $age, $userId);
+        
+        mysqli_stmt_execute($stmt);
+        mysqli_stmt_close($stmt);
+    }
+
     function deleteUser($conn, $userId){
         $sql = "DELETE FROM users WHERE id = ?;";
 
@@ -148,7 +166,7 @@
         mysqli_stmt_bind_param($stmt, "i", $userId);
         
         mysqli_stmt_execute($stmt);
-        mysqli_stmt_close();
+        mysqli_stmt_close($stmt);
     }
 
 

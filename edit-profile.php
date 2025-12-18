@@ -15,7 +15,7 @@
     </div>
     <div class="row">
         <div class="col">
-            <form action="" method="post">
+            <form action="includes/edit-user-inc.php" method="post">
                 <div class="row">
                     <div class="col">
                         <input type="text" name="username" id="username" placeholder="Username" class="w-100 m-2">
@@ -55,10 +55,10 @@
                 </div>
                 <div class="row my-3">
                     <div class="col">
-                        <button class="btn btn-success w-100 m-2" type="submit">Submit</button>
+                        <button class="btn btn-success w-100 m-2" type="submit" name="submit" id="submit">Submit</button>
                     </div>
                     <div class="col">
-                        <button class="btn btn-danger w-100 m-2" type="reset">Cancel</button>
+                        <button class="btn btn-danger w-100 m-2" type="reset" name="cancel" id="cancel">Cancel</button>
                     </div>
                 </div>
             </form>
