@@ -1,6 +1,40 @@
 <?php
     // This file will be used for all code that interacts with the database
 
+    function deleteUser($conn, $userId){
+        $sql = "DELETE FROM users WHERE id = ?;";
+
+        $stmt = mysqli_stmt_init($conn);
+
+        if(!mysqli_stmt_prepare($stmt,$sql)){
+            header("location: ../edit-profile.php?error=stmtfailed");
+            exit();
+        }
+
+        mysqli_stmt_bind_param($stmt, "i", $userId);
+        
+        mysqli_stmt_execute($stmt);
+        mysqli_stmt_close($stmt);
+    }
+
+    function editUser($conn, $userId, $username, $password, $firstName, $lastName, $age){
+        $sql = "UPDATE users SET username = ?, password = ?, name = ?,surname = ?, age = ? WHERE id = ?;";
+
+        $stmt = mysqli_stmt_init($conn);
+
+        if(!mysqli_stmt_prepare($stmt,$sql)){
+            header("location: ../edit-profile.php?error=stmtfailed");
+            exit();
+        }
+
+        $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
+
+        mysqli_stmt_bind_param($stmt, "ssssii", $username, $hashedPassword, $firstName, $lastName, $age, $userId);
+        
+        mysqli_stmt_execute($stmt);
+        mysqli_stmt_close($stmt);
+    }
+
     function getUsers($conn){
         /* 
             This function sets up an SQL statement, and tests if it will work.
@@ -54,34 +88,6 @@
         }
     }
 
-    function registerUser($conn, $username, $password, $firstName, $lastName, $age, $nationality, $email){
-        /*
-            This function will insert new data into the database. 
-            In our SQL, we need multiple wildcards, since we need to supply multiple pieces of information to be stored in the database.
-        */
-        $sql = "INSERT INTO users (username,password,name,surname,age,nationality,email) VALUES (?,?,?,?,?,?,?);";
-
-        $stmt = mysqli_stmt_init($conn);
-
-        if(!mysqli_stmt_prepare($stmt,$sql)){
-            // Here we are upgrading our error handling, using QueryStrings instead of a simple echo
-            header("location: ../register.php?error=stmtfailed");
-            exit();
-        }
-
-        // Password hashing is an essential process, which will modify how the password is structured and can never be decrypted, making our users' passwords secure
-        $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
-
-        mysqli_stmt_bind_param($stmt, "ssssiss", $username, $hashedPassword, $firstName, $lastName, $age, $nationality, $email);
-
-        mysqli_stmt_execute($stmt);
-        mysqli_stmt_close($stmt);
-    }
-
-
-
-
-
     function login($conn, $username, $password){
         $user = userExists($conn, $username);
         
@@ -107,6 +113,30 @@
 
         header("location: ../profile.php");
         exit();
+    }
+
+    function registerUser($conn, $username, $password, $firstName, $lastName, $age, $nationality, $email){
+        /*
+            This function will insert new data into the database. 
+            In our SQL, we need multiple wildcards, since we need to supply multiple pieces of information to be stored in the database.
+        */
+        $sql = "INSERT INTO users (username,password,name,surname,age,nationality,email) VALUES (?,?,?,?,?,?,?);";
+
+        $stmt = mysqli_stmt_init($conn);
+
+        if(!mysqli_stmt_prepare($stmt,$sql)){
+            // Here we are upgrading our error handling, using QueryStrings instead of a simple echo
+            header("location: ../register.php?error=stmtfailed");
+            exit();
+        }
+
+        // Password hashing is an essential process, which will modify how the password is structured and can never be decrypted, making our users' passwords secure
+        $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
+
+        mysqli_stmt_bind_param($stmt, "ssssiss", $username, $hashedPassword, $firstName, $lastName, $age, $nationality, $email);
+
+        mysqli_stmt_execute($stmt);
+        mysqli_stmt_close($stmt);
     }
 
     function userExists($conn, $username){
@@ -135,47 +165,18 @@
 
     }
 
-    function editUser($conn, $userId, $username, $password, $firstName, $lastName, $age){
-        $sql = "UPDATE users SET username = ?, password = ?, name = ?,surname = ?, age = ? WHERE id = ?;";
-
-        $stmt = mysqli_stmt_init($conn);
-
-        if(!mysqli_stmt_prepare($stmt,$sql)){
-            header("location: ../edit-profile.php?error=stmtfailed");
-            exit();
-        }
-
-        $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
-
-        mysqli_stmt_bind_param($stmt, "ssssii", $username, $hashedPassword, $firstName, $lastName, $age, $userId);
-        
-        mysqli_stmt_execute($stmt);
-        mysqli_stmt_close($stmt);
-    }
-
-    function deleteUser($conn, $userId){
-        $sql = "DELETE FROM users WHERE id = ?;";
-
-        $stmt = mysqli_stmt_init($conn);
-
-        if(!mysqli_stmt_prepare($stmt,$sql)){
-            header("location: ../edit-profile.php?error=stmtfailed");
-            exit();
-        }
-
-        mysqli_stmt_bind_param($stmt, "i", $userId);
-        
-        mysqli_stmt_execute($stmt);
-        mysqli_stmt_close($stmt);
-    }
-
-
-
+    
 
 
     // Validation functions
     function emptyRegistrationInput($username, $password, $firstName, $lastName, $age, $nationality, $email){
         if(empty($username) || empty($password) || empty($firstName) || empty($lastName) || empty($age) || empty($nationality) || empty($email)){
+            return true;
+        }
+    }
+
+    function invalidEmail($email){
+        if(!filter_var($email, FILTER_VALIDATE_EMAIL)){
             return true;
         }
     }
@@ -194,19 +195,8 @@
         }
     }
 
-    function invalidEmail($email){
-        if(!filter_var($email, FILTER_VALIDATE_EMAIL)){
-            return true;
-        }
-    }
+    
 
 
-
-    // We should have a bunch of other functions that check different things
-    // Examples: 
-    // - invalid username  -> maybe we do not want symbols in usernames
-    // - invalid password  -> we can check if a password has letters, numbers, and symbols
-    // - invalid email     -> check email structure : something@something.something
-
-
+    
 ?>
