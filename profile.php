@@ -13,13 +13,22 @@
     $name = $user["name"];
     $surname = $user["surname"];
     $age = $user["age"];
+    $profileImageUrl = $user["url"];
+
+    // Here, we can set up the default image url
+    $imageUrl = "images/user.png";
+    // And then, if we actually have an image url from the database, we replace that default image url
+    if($profileImageUrl != null && $profileImageUrl != ""){
+        $imageUrl = "imageUploads/".$profileImageUrl;
+    }
 ?>
 
 <div class="container mt-2">
     <div class="row">
         <div class="col-2">
+            <!-- Here we build an img element with the url of the image built in PHP. If we have an image url in the database, we use that, otherwise, we get the default image. -->
             <img 
-                src="images/user.png" 
+                src="<?php echo $imageUrl; ?>" 
                 alt="Default User Icon"
                 style="height:100px;width:100px;"
             >

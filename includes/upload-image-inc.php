@@ -66,6 +66,8 @@ else{
 
         // Here we should add a link between the image and the user
         // This should be done in the database and requires a new field in the User table 
+        $imageId = createProfileImage($conn, $userId, $newFileName);
+        editProfileImage($conn, $userId, $imageId);
 
         header("location: ../edit-profile.php?succes=true");
         exit();

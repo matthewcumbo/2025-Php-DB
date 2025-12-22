@@ -1,6 +1,25 @@
 <?php
     // This file will be used for all code that interacts with the database
 
+    function createProfileImage($conn, $userId, $url){
+        // This function will add a new record of a profile image for a specific images table
+        // Each user can have multiple profile pictures, we will always use the latest one in their profile
+        $sql = "INSERT INTO images (userId, url) VALUES (?,?);";
+        $stmt = mysqli_stmt_init($conn);
+        if(!mysqli_stmt_prepare($stmt, $sql)){
+            header("location: ../edit-profile.php?error=true&func=cpi");
+            exit();
+        }
+
+        mysqli_stmt_bind_param($stmt, "is", $userId, $url);
+
+        mysqli_stmt_execute($stmt);
+        mysqli_stmt_close($stmt);
+    
+        // this returns the generated record id from the database table
+        return $conn->insert_id;
+    }
+
     function deleteUser($conn, $userId){
         $sql = "DELETE FROM users WHERE id = ?;";
 
@@ -35,6 +54,23 @@
         mysqli_stmt_close($stmt);
     }
 
+    function editProfileImage($conn, $userId, $imageId){
+        // This function updates the profile image field in the user table to link to the latest image uploaded by that user 
+
+        $sql = "UPDATE users SET imageId = ? WHERE id = ?;";
+        $stmt = mysqli_stmt_init($conn);
+        if(!mysqli_stmt_prepare($stmt, $sql)){
+            header("location: ../edit-profile.php?error=true&func=epi");
+            exit();
+        }
+
+        mysqli_stmt_bind_param($stmt, "ii", $imageId, $userId);
+
+        mysqli_stmt_execute($stmt);
+        mysqli_stmt_close($stmt);
+
+    }
+
     function getUsers($conn){
         /* 
             This function sets up an SQL statement, and tests if it will work.
@@ -63,7 +99,7 @@
             This function is very similar to the one above. It gets all details from the users table, but only for one user.
             We add a userId parameter to be able to receive it from elsewhere, and then we can use it to filter out the results through SQL. 
         */
-        $sql = "SELECT * FROM users WHERE id = ?;";
+        $sql = "SELECT u.*, i.url FROM users AS u LEFT JOIN images AS i on u.imageId = i.id WHERE u.id = ?;";
         // The ? above is called a wildcard. It's used to test the SQL statement and then replace it with an actual value.
         $stmt = mysqli_stmt_init($conn);
 
